@@ -1,0 +1,9 @@
+subject,pipeline,mean_accuracy,std_accuracy,n_epochs_data
+A01,MindReaderModel,0.7531,0.0663,288
+A02,MindReaderModel,0.4209,0.1051,288
+A03,MindReaderModel,0.8129,0.0495,288
+A05,MindReaderModel,0.3366,0.1120,288
+A06,MindReaderModel,0.3887,0.0368,288
+A07,MindReaderModel,0.6840,0.0644,288
+A08,MindReaderModel,0.8365,0.0404,288
+A09,MindReaderModel,0.8227,0.0398,288
