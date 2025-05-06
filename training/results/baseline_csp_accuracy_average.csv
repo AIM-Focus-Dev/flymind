@@ -1,0 +1,3 @@
+pipeline,mean,std
+CSP+LDA,0.6269,0.1562
+CSP+SVM,0.6227,0.1646

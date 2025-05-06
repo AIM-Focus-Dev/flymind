@@ -1,0 +1,3 @@
+pipeline,mean,std
+ConvAE+PyTorchMLP,0.2656,0.0120
+ConvAE+SVM,0.2815,0.0371
