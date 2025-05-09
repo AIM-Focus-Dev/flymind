@@ -35,7 +35,6 @@ except ImportError:
     N_SAMPLES = 751
     N_CLASSES = 4
     from preprocess_data import load_and_preprocess_subject_data
-    # *** Import the renamed MindReaderModel ***
     from supervised_models import MindReaderModel
     print(f"Imported paths: DATA={DATA_PATH}, MODELS={MODELS_PATH}, RESULTS={RESULTS_PATH}")
 
@@ -306,7 +305,6 @@ def run_mindreader_evaluation():
             'n_epochs_data': n_epochs
         })
 
-        # Optional: Save the final model trained on one fold, or train a final model on all data
         # torch.save(trained_model.state_dict(), MODELS_PATH / f"mindreader_subject_{subject_id:02d}_final.pth")
 
 

@@ -10,10 +10,8 @@ import seaborn as sns           # For plotting confusion matrix
 from sklearn.pipeline import Pipeline
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
 from sklearn.svm import SVC
-# Import cross_val_predict and confusion_matrix
 from sklearn.model_selection import StratifiedKFold, cross_val_score, cross_val_predict
 from sklearn.metrics import accuracy_score, confusion_matrix
-# *** Import the missing CSP class ***
 from mne.decoding import CSP
 
 # --- Import Preprocessing Function and Config ---
@@ -104,7 +102,6 @@ def run_baseline_evaluation():
             continue
 
         # 3. Define pipelines
-        # *** Now CSP is defined because of the added import ***
         csp = CSP(n_components=N_CSP_COMPONENTS, reg='ledoit_wolf', log=True, norm_trace=False)
         lda = LDA()
         svm = SVC(kernel='rbf', C=1.0, gamma='scale')

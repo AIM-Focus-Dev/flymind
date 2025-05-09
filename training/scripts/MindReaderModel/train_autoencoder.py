@@ -33,7 +33,7 @@ except ImportError:
     print(f"Imported paths: DATA={DATA_PATH}, MODELS={MODELS_PATH}")
     LEARNING_RATE = 1e-3
     BATCH_SIZE = 64
-    NUM_EPOCHS = 50 # Keep epochs same for now, can increase later
+    NUM_EPOCHS = 50 
 
 # --- Configuration ---
 # *** Use the latent dimension from the imported model ***
@@ -58,7 +58,7 @@ def train_eegnet_inspired_autoencoder():
        and saves the encoder weights and scaler."""
     print(f"=== Starting EEGNet-Inspired ConvAE Training (Latent Dim: {CURRENT_LATENT_DIM}) ===")
 
-    # 1. Load and Prepare Data (Same as before)
+    # 1. Load and Prepare Data 
     print("Loading and concatenating training data for all subjects...")
     all_train_epochs_list = []
     for subject_id in range(1, N_SUBJECTS + 1):
@@ -80,7 +80,6 @@ def train_eegnet_inspired_autoencoder():
     assert n_channels_data == N_CHANNELS and n_samples_data == N_SAMPLES
 
     # --- SCALING (Using feature-wise on flattened data, then reshape) ---
-    # (Consider channel-wise scaling later if results are poor)
     print("Calculating scaler on flattened training data...")
     X_train_flat = X_train_all.reshape(n_total_epochs, -1)
     X_train_flat_64 = X_train_flat.astype(np.float64)
@@ -118,7 +117,7 @@ def train_eegnet_inspired_autoencoder():
         for i, (batch_data, _) in enumerate(train_loader):
             # *** batch_data shape is (batch_size, n_channels, n_samples) ***
             batch_data = batch_data.to(DEVICE)
-            outputs = model(batch_data) # Model expects this shape now
+            outputs = model(batch_data) 
             loss = criterion(outputs, batch_data)
             optimizer.zero_grad()
             loss.backward()
@@ -131,18 +130,9 @@ def train_eegnet_inspired_autoencoder():
 
     # 4. Save the Trained Encoder Weights
     print(f"Saving trained encoder state dictionary to: {ENCODER_SAVE_PATH}")
-    # Save the state_dict of the encoder part (which is the whole model up to fc_encode)
-    # We need to ensure the 'encoder' attribute exists or save specific layers
-    # In the EEGNetInspiredConvAE, the encode method uses multiple attributes.
-    # For simplicity, let's save the whole model and load the whole model in the hybrid script,
-    # then just use its .encode() method. Alternatively, restructure EEGNetInspiredConvAE
-    # to have a self.encoder = nn.Sequential(...) like the first ConvAE.
-    # Saving the whole model is easier for now:
     WHOLE_MODEL_SAVE_PATH = MODELS_PATH / f"eegnet_ae_latent{CURRENT_LATENT_DIM}_full.pth"
     torch.save(model.state_dict(), WHOLE_MODEL_SAVE_PATH)
     print(f"Full AE model saved to {WHOLE_MODEL_SAVE_PATH}")
-    # If you MUST save only the encoder part, you'd need to restructure the model definition
-    # or manually save the state_dict of constituent layers:
     # encoder_state = {
     #     **model.conv1.state_dict(), **model.bn1_enc.state_dict(), ..., **model.fc_encode.state_dict()
     # }
