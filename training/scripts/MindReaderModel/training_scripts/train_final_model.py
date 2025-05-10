@@ -16,12 +16,11 @@ from sklearn.preprocessing import StandardScaler
 
 # --- Import Components ---
 try:
-    from .preprocess_data import (
-        load_and_preprocess_subject_data, N_SUBJECTS, DATA_PATH,
-        MODELS_PATH, RESULTS_PATH
-    )
+    from ..preprocess_data import load_and_preprocess_subject_data
+    from ..configs.config import N_SUBJECTS, DATA_PATH, MODELS_PATH, RESULTS_PATH
+    from ..configs.sm_config import N_CHANNELS, N_CLASSES, N_SAMPLES
     # Import the final model definition (ensure supervised_models.py has original EEGNet params)
-    from .supervised_models import MindReaderModel, N_CLASSES
+    from ..supervised_models import MindReaderModel, N_CLASSES
     print(f"Imported paths: DATA={DATA_PATH}, MODELS={MODELS_PATH}, RESULTS={RESULTS_PATH}")
 except ImportError:
     print("Could not import from siblings, importing directly.")

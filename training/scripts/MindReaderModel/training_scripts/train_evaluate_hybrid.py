@@ -1,5 +1,5 @@
-# File: training/scripts/MindReaderModel/train_evaluate_hybrid.py
-# Updated to use features from the EEGNetInspiredConvAE
+# File: training/scripts/MindReaderModel/training_scripts/train_evaluate_hybrid.py
+# Unsupervised + Supervised
 
 import torch
 import torch.nn as nn
@@ -16,13 +16,14 @@ from sklearn.svm import SVC
 from sklearn.model_selection import StratifiedKFold, cross_val_score
 from sklearn.metrics import accuracy_score
 
-from training.scripts.MindReaderModel.train_autoencoder import BATCH_SIZE
+from .train_autoencoder import BATCH_SIZE
 
 # --- Import Components ---
 try:
-    from .preprocess_data import load_and_preprocess_subject_data, N_SUBJECTS, DATA_PATH, MODELS_PATH, RESULTS_PATH
+    from ..preprocess_data import load_and_preprocess_subject_data
+    from ..configs.config import N_SUBJECTS, DATA_PATH, MODELS_PATH, RESULTS_PATH
     # *** Import the EEGNet-Inspired AE definition and its LATENT_DIM ***
-    from .supervised_models import EEGNetInspiredConvAE, AE_LATENT_DIM, MLPClassifierPytorch, N_CLASSES
+    from ..hybrid_models import EEGNetInspiredConvAE, AE_LATENT_DIM, MLPClassifierPytorch, N_CLASSES
     print(f"Imported paths: DATA={DATA_PATH}, MODELS={MODELS_PATH}, RESULTS={RESULTS_PATH}")
 except ImportError:
     print("Could not import from siblings, importing directly.")
@@ -39,7 +40,7 @@ except ImportError:
     N_CLASSES = 4
     from preprocess_data import load_and_preprocess_subject_data
     # *** Import the EEGNet-Inspired AE definition and its LATENT_DIM ***
-    from supervised_models import EEGNetInspiredConvAE, AE_LATENT_DIM, MLPClassifierPytorch
+    from hybrid_models import EEGNetInspiredConvAE, AE_LATENT_DIM, MLPClassifierPytorch
     print(f"Imported paths: DATA={DATA_PATH}, MODELS={MODELS_PATH}, RESULTS={RESULTS_PATH}")
 
 # --- Configuration ---

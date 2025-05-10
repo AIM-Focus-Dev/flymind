@@ -1,0 +1,22 @@
+# Includes configuration/parameters for auto-encoder model
+# --- Configuration  ---
+N_CHANNELS = 22
+N_SAMPLES = 751 # (288, 22, 751)
+
+# ConvAE Hyperparameters
+CONV_FILTERS_1 = 32
+CONV_KERNEL_1 = 15
+CONV_STRIDE_1 = 2
+CONV_PADDING_1 = 7
+
+CONV_FILTERS_2 = 64
+CONV_KERNEL_2 = 11
+CONV_STRIDE_2 = 2
+CONV_PADDING_2 = 5
+
+CONV_FILTERS_3 = 128
+CONV_KERNEL_3 = 7
+CONV_STRIDE_3 = 2
+CONV_PADDING_3 = 3
+
+LATENT_DIM = 128

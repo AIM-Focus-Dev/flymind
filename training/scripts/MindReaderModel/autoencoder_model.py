@@ -4,29 +4,8 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from configs.ae_config import N_CHANNELS, N_SAMPLES, CONV_FILTERS_1, CONV_KERNEL_1, CONV_STRIDE_1, CONV_PADDING_1, CONV_FILTERS_2, CONV_KERNEL_2, CONV_STRIDE_2, CONV_PADDING_2, CONV_FILTERS_3, CONV_KERNEL_3, CONV_STRIDE_3, CONV_PADDING_3, LATENT_DIM
 
-# --- Configuration (Should match preprocessed data) ---
-N_CHANNELS = 22
-N_SAMPLES = 751 # From previous logs (288, 22, 751)
-
-# ConvAE Hyperparameters (can be tuned)
-CONV_FILTERS_1 = 32
-CONV_KERNEL_1 = 15
-CONV_STRIDE_1 = 2
-CONV_PADDING_1 = 7
-
-CONV_FILTERS_2 = 64
-CONV_KERNEL_2 = 11
-CONV_STRIDE_2 = 2
-CONV_PADDING_2 = 5
-
-CONV_FILTERS_3 = 128
-CONV_KERNEL_3 = 7
-CONV_STRIDE_3 = 2
-CONV_PADDING_3 = 3
-
-LATENT_DIM = 128
-# ----------------------------------------------------------
 
 class ConvAutoencoder1D(nn.Module):
     """

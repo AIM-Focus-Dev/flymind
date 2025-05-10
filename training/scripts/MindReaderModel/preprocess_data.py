@@ -4,34 +4,7 @@ import mne
 import numpy as np
 import os
 from pathlib import Path # For handling paths reliably
-
-# --- Configuration (Consider moving to config.py later) ---
-try:
-    PROJECT_ROOT = Path(__file__).resolve().parents[3]
-except NameError:
-    PROJECT_ROOT = Path('.').resolve().parents[2] # Adjust if running interactively from script dir
-
-DATA_PATH = PROJECT_ROOT / "training" / "data" / "MindReaderData" / "BCICIV_2a_gdf"
-RESULTS_PATH = PROJECT_ROOT / "training" / "results" # Added for potential saving later
-MODELS_PATH = PROJECT_ROOT / "training" / "models"   # Added for saving models later
-RESULTS_PATH.mkdir(parents=True, exist_ok=True)
-MODELS_PATH.mkdir(parents=True, exist_ok=True)
-
-FS = 250  # Sampling frequency of the dataset (Hz)
-LOW_FREQ = 8.0  # Lower cut-off frequency for band-pass filter (Hz)
-HIGH_FREQ = 35.0 # Upper cut-off frequency for band-pass filter (Hz)
-TMIN = 0.5 # Start epochs 0.5 seconds after the cue
-TMAX = 3.5 # End epochs 3.5 seconds after the cue (giving a 3-second epoch length)
-N_SUBJECTS = 9
-
-# Descriptions mapping to task names (keys are strings matching potential annotations)
-EVENT_DESC_MAP = {
-    '769': 'left_hand',
-    '770': 'right_hand',
-    '771': 'feet',
-    '772': 'tongue'
-}
-# ----------------------------------------------------------
+from .configs.config import PROJECT_ROOT, DATA_PATH, RESULTS_PATH, MODELS_PATH, RESULTS_PATH, MODELS_PATH, FS, LOW_FREQ, HIGH_FREQ, TMIN, TMAX, N_SUBJECTS, EVENT_DESC_MAP
 
 def load_and_preprocess_subject_data(subject_id, session_type='T', data_path=DATA_PATH,
                                      l_freq=LOW_FREQ, h_freq=HIGH_FREQ, tmin=TMIN, tmax=TMAX,

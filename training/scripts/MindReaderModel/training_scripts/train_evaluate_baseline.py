@@ -1,5 +1,4 @@
-# File: training/scripts/MindReaderModel/train_evaluate_baseline.py
-# Updated to include confusion matrix plotting and fix CSP import
+# File: training/scripts/MindReaderModel/training_scripts/train_evaluate_baseline.py
 
 import numpy as np
 import pandas as pd
@@ -16,10 +15,10 @@ from mne.decoding import CSP
 
 # --- Import Preprocessing Function and Config ---
 try:
-    from .preprocess_data import (
-        load_and_preprocess_subject_data, N_SUBJECTS, DATA_PATH,
-        RESULTS_PATH # Import needed constants
+    from ..preprocess_data import (
+        load_and_preprocess_subject_data
     )
+    from ..configs.config import N_SUBJECTS, DATA_PATH,RESULTS_PATH # Import  constants
     print(f"Imported paths: DATA={DATA_PATH}, RESULTS={RESULTS_PATH}")
 except ImportError:
     print("Could not import from sibling, importing preprocess_data directly.")

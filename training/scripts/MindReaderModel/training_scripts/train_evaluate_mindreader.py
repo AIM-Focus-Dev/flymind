@@ -1,4 +1,4 @@
-# File: training/scripts/MindReaderModel/train_evaluate_mindreader.py
+# File: training/scripts/MindReaderModel/training_scripts/rain_evaluate_mindreader.py
 
 import torch
 import torch.nn as nn
@@ -17,9 +17,10 @@ from sklearn.metrics import accuracy_score, cohen_kappa_score, f1_score, confusi
 
 # --- Import Components ---
 try:
-    from .preprocess_data import load_and_preprocess_subject_data, N_SUBJECTS, DATA_PATH, MODELS_PATH, RESULTS_PATH 
-    #  Import the renamed MindReaderModel 
-    from .supervised_models import MindReaderModel, N_CLASSES
+    from ..preprocess_data import load_and_preprocess_subject_data
+    from ..configs.config import N_SUBJECTS, DATA_PATH, MODELS_PATH, RESULTS_PATH
+    # *** Import the renamed MindReaderModel ***
+    from ..supervised_models import MindReaderModel, N_CLASSES
     print(f"Imported paths: DATA={DATA_PATH}, MODELS={MODELS_PATH}, RESULTS={RESULTS_PATH}")
 except ImportError:
     print("Could not import from siblings, importing directly.")
@@ -35,7 +36,6 @@ except ImportError:
     N_SAMPLES = 751
     N_CLASSES = 4
     from preprocess_data import load_and_preprocess_subject_data
-    # *** Import the renamed MindReaderModel ***
     from supervised_models import MindReaderModel
     print(f"Imported paths: DATA={DATA_PATH}, MODELS={MODELS_PATH}, RESULTS={RESULTS_PATH}")
 
@@ -77,7 +77,7 @@ def plot_training_history(history, subject_id, results_path):
     ax1.tick_params(axis='y', labelcolor=color)
     ax1.legend(loc='upper left')
 
-    ax2 = ax1.twinx()  
+    ax2 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
     color = 'tab:blue'
     ax2.set_ylabel('Accuracy', color=color)
     ax2.plot(epochs, history['val_acc'], color=color, label='Validation Accuracy')
@@ -85,7 +85,7 @@ def plot_training_history(history, subject_id, results_path):
     ax2.legend(loc='upper right')
 
     plt.title(f'Subject {subject_id:02d} Training History (Avg over Folds)')
-    fig.tight_layout() 
+    fig.tight_layout() # otherwise the right y-label is slightly clipped
     plot_filename = results_path / f"subject_{subject_id:02d}_training_history.png"
     plt.savefig(plot_filename)
     print(f"Saved training history plot to {plot_filename}")
@@ -177,7 +177,7 @@ def train_mindreader_fold(X_train_fold, y_train_fold, X_val_fold, y_val_fold,
         if avg_val_loss < best_val_loss:
             best_val_loss = avg_val_loss
             epochs_no_improve = 0
-            torch.save(model.state_dict(), f"temp_best_mindreader_fold.pth") # Optional save best
+            # torch.save(model.state_dict(), f"temp_best_mindreader_fold.pth") # Optional save best
         else:
             epochs_no_improve += 1
             if epochs_no_improve >= EARLY_STOPPING_PATIENCE:
@@ -306,8 +306,7 @@ def run_mindreader_evaluation():
             'n_epochs_data': n_epochs
         })
 
-        # Optional: Save the final model trained on one fold, or train a final model on all data
-        torch.save(trained_model.state_dict(), MODELS_PATH / f"mindreader_subject_{subject_id:02d}_final.pth")
+        # torch.save(trained_model.state_dict(), MODELS_PATH / f"mindreader_subject_{subject_id:02d}_final.pth")
 
 
     # --- Process and Save Overall Results ---

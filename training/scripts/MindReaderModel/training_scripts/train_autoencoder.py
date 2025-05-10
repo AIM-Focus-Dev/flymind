@@ -1,5 +1,4 @@
-# File: training/scripts/MindReaderModel/train_autoencoder.py
-# Updated to train the EEGNetInspiredConvAE
+# File: training/scripts/MindReaderModel/training_scripts/train_autoencoder.py
 
 import torch
 import torch.nn as nn
@@ -12,9 +11,11 @@ import time
 
 # --- Import Components ---
 try:
-    from .preprocess_data import load_and_preprocess_subject_data, N_SUBJECTS, DATA_PATH, MODELS_PATH
+    from ..preprocess_data import load_and_preprocess_subject_data
+    from ..configs.config import N_SUBJECTS, DATA_PATH, MODELS_PATH
     # *** Import the EEGNet-Inspired AE and its specific LATENT_DIM ***
-    from .supervised_models import EEGNetInspiredConvAE, AE_LATENT_DIM # Use AE_LATENT_DIM
+    from ..hybrid_models import EEGNetInspiredConvAE
+    from ..configs.sm_config import AE_LATENT_DIM
     print(f"Imported paths: DATA={DATA_PATH}, MODELS={MODELS_PATH}")
 except ImportError:
     print("Could not import from siblings, importing directly.")
@@ -29,14 +30,14 @@ except ImportError:
     N_SAMPLES = 751
     from preprocess_data import load_and_preprocess_subject_data
     # *** Import the EEGNet-Inspired AE and its specific LATENT_DIM ***
-    from supervised_models import EEGNetInspiredConvAE, AE_LATENT_DIM # Use AE_LATENT_DIM
+    from hybrid_models import EEGNetInspiredConvAE
+    from ..configs.sm_config import AE_LATENT_DIM   
     print(f"Imported paths: DATA={DATA_PATH}, MODELS={MODELS_PATH}")
     LEARNING_RATE = 1e-3
     BATCH_SIZE = 64
     NUM_EPOCHS = 50 
 
 # --- Configuration ---
-# *** Use the latent dimension from the imported model ***
 CURRENT_LATENT_DIM = AE_LATENT_DIM
 
 if torch.backends.mps.is_available():

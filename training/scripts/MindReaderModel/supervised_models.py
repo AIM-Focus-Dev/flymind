@@ -4,23 +4,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-
-# --- Configuration ---
-# These should ideally be passed as arguments or read from config
-N_CHANNELS = 22
-N_SAMPLES = 751 # Based on BCI IV 2a with 3s epochs at 250Hz
-N_CLASSES = 4   # LH, RH, F, T
-
-# --- MindReaderModel (EEGNet) ---
-# *** Reverted to Original EEGNet Hyperparameters ***
-EEGNET_F1 = 8
-EEGNET_D = 2
-EEGNET_F2 = EEGNET_F1 * EEGNET_D # 16
-EEGNET_KERNEL_T = 64 # ~250ms at 250Hz
-EEGNET_POOL_T = 8    # Original pooling size used when it performed better
-EEGNET_KERNEL_S = N_CHANNELS
-EEGNET_DROPOUT = 0.25
-# *** End Reverted Params ***
+from .configs.sm_config import N_CHANNELS, N_SAMPLES, N_CLASSES, EEGNET_F1, EEGNET_D, EEGNET_F2, EEGNET_KERNEL_T, EEGNET_POOL_T, EEGNET_KERNEL_S, EEGNET_DROPOUT 
 
 class MindReaderModel(nn.Module):
     """
