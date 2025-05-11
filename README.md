@@ -12,6 +12,10 @@ The EEG data is preprocessed using `training/scripts/MindReaderModel/preprocess_
 
 The dataset used in this project, is the BCI competition 2a dataset which can be found [here](https://bbci.de/competition/iv/download/)
 
+Please download it and place it inside this path `flymind/training/data/MindReaderData/BCICIV_2a_gdf`
+
+You may need to create the path.
+
 ## Models
 
 This project explores three main types of models for classifying motor imagery tasks from EEG data:
