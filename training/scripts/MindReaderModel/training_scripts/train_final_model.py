@@ -1,4 +1,4 @@
-# File: training/scripts/MindReaderModel/train_final_model.py
+# File: training/scripts/MindReaderModel/training_scripts/train_final_model.py
 # Trains the final MindReaderModel on a single subject's full training data.
 
 import torch
@@ -19,7 +19,7 @@ try:
     from ..preprocess_data import load_and_preprocess_subject_data
     from ..configs.config import N_SUBJECTS, DATA_PATH, MODELS_PATH, RESULTS_PATH
     from ..configs.sm_config import N_CHANNELS, N_CLASSES, N_SAMPLES
-    # Import the final model definition (ensure supervised_models.py has original EEGNet params)
+    # Import the final model definition 
     from ..supervised_models import MindReaderModel, N_CLASSES
     print(f"Imported paths: DATA={DATA_PATH}, MODELS={MODELS_PATH}, RESULTS={RESULTS_PATH}")
 except ImportError:
@@ -36,19 +36,17 @@ except ImportError:
     N_SAMPLES = 751
     N_CLASSES = 4
     from preprocess_data import load_and_preprocess_subject_data
-    from supervised_models import MindReaderModel # Assumes original EEGNet params
+    from supervised_models import MindReaderModel 
     print(f"Imported paths: DATA={DATA_PATH}, MODELS={MODELS_PATH}, RESULTS={RESULTS_PATH}")
 
 # --- Configuration ---
 TARGET_SUBJECT_ID = 8 # Train on Subject A08
 FINAL_MODEL_NAME = f"mindreader_subject{TARGET_SUBJECT_ID:02d}_final"
 
-# Training parameters (can be adjusted)
-LEARNING_RATE = 5e-4 # Use the rate from the last successful run
+# Training parameters 
+LEARNING_RATE = 5e-4 
 BATCH_SIZE = 32
-# Train for a fixed number of epochs on the full dataset
-# Or implement validation split within this data if desired
-NUM_EPOCHS = 100 # Adjust as needed, monitor loss curve
+NUM_EPOCHS = 100 
 WEIGHT_DECAY = 1e-4
 
 # Device setup
@@ -79,7 +77,7 @@ def train_final_subject_model(subject_id=TARGET_SUBJECT_ID):
         print(f"Error: No training epochs found for Subject {subject_id}. Exiting.")
         return
 
-    # --- Get Class Mapping (Important for Prediction Script Later) ---
+    # --- Get Class Mapping ---
     if not hasattr(epochs_train, 'event_id') or not epochs_train.event_id:
          print("Error: Loaded epochs object has no event_id dictionary.")
          return
@@ -89,7 +87,6 @@ def train_final_subject_model(subject_id=TARGET_SUBJECT_ID):
     class_names = [mne_id_to_task[mne_id] for mne_id in sorted_mne_ids]
     print(f"Using Subject {subject_id}'s event mapping: {mne_id_map}")
     print(f"Class names (order 0-{N_CLASSES-1}): {class_names}")
-    # --- End Get Class Mapping ---
 
     # 2. Extract data (X) and labels (y)
     X_np = epochs_train.get_data(copy=True).astype(np.float64) # Copy for scaling
@@ -110,7 +107,7 @@ def train_final_subject_model(subject_id=TARGET_SUBJECT_ID):
     scaler = StandardScaler()
     X_reshaped = X_np.reshape(n_epochs * n_channels_data, n_samples_data)
     scaler.fit(X_reshaped) # Fit scaler ONLY on this subject's training data
-    print("Applying subject-specific standardization...")
+    print("Applying subject-specific standardisation...")
     X_scaled_reshaped = scaler.transform(X_reshaped)
     X_scaled = X_scaled_reshaped.reshape(n_epochs, n_channels_data, n_samples_data).astype(np.float32)
 
@@ -119,7 +116,6 @@ def train_final_subject_model(subject_id=TARGET_SUBJECT_ID):
     # Save scaler parameters (mean_ and scale_ == standard deviation)
     np.savez(scaler_save_path, mean=scaler.mean_, scale=scaler.scale_)
     print(f"Subject-specific scaler saved to {scaler_save_path}")
-    # --- End Save Scaler ---
 
     # 4. Prepare PyTorch DataLoader
     train_tensor_x = torch.tensor(X_scaled, dtype=torch.float32)
@@ -129,8 +125,8 @@ def train_final_subject_model(subject_id=TARGET_SUBJECT_ID):
     train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True, num_workers=0)
     print(f"Created DataLoader with {len(train_dataset)} samples.")
 
-    # 5. Initialize Model, Loss, Optimizer
-    print("Initializing MindReaderModel...")
+    # 5. Initialise Model, Loss, Optimiser
+    print("Initialising MindReaderModel...")
     model = MindReaderModel(n_channels=N_CHANNELS, n_samples=N_SAMPLES, num_classes=N_CLASSES).to(DEVICE)
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.AdamW(model.parameters(), lr=LEARNING_RATE, weight_decay=WEIGHT_DECAY)
@@ -164,7 +160,6 @@ def train_final_subject_model(subject_id=TARGET_SUBJECT_ID):
         epoch_losses.append(avg_epoch_loss)
         print(f'====> Epoch: {epoch+1}/{NUM_EPOCHS} Average loss: {avg_epoch_loss:.6f}, Accuracy: {epoch_acc:.4f}')
 
-        # Optional: Add simple check for exploding/vanishing loss/gradients if needed
 
     end_time = time.time()
     print(f"Training finished in {end_time - start_time:.2f} seconds.")

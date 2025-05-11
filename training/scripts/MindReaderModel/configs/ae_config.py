@@ -1,5 +1,6 @@
 # Includes configuration/parameters for auto-encoder model
 # --- Configuration  ---
+N_SUBJECTS = 9
 N_CHANNELS = 22
 N_SAMPLES = 751 # (288, 22, 751)
 

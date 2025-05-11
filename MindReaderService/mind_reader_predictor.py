@@ -35,7 +35,6 @@ class MindReaderPredictor:
             self.PROJECT_ROOT = Path(project_root_path)
         else:
             # Auto-detect project root assuming this script is within a known structure
-            # (e.g., project_root/MindReaderService/this_file.py).
             self.PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
         # Add project root to sys.path to allow for absolute imports of project modules.

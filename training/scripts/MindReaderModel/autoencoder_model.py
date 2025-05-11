@@ -1,10 +1,9 @@
 # File: training/scripts/MindReaderModel/autoencoder_model.py
-# Corrected ConvAutoencoder1D definition
 
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from configs.ae_config import N_CHANNELS, N_SAMPLES, CONV_FILTERS_1, CONV_KERNEL_1, CONV_STRIDE_1, CONV_PADDING_1, CONV_FILTERS_2, CONV_KERNEL_2, CONV_STRIDE_2, CONV_PADDING_2, CONV_FILTERS_3, CONV_KERNEL_3, CONV_STRIDE_3, CONV_PADDING_3, LATENT_DIM
+from .configs.ae_config import N_CHANNELS, N_SAMPLES, CONV_FILTERS_1, CONV_KERNEL_1, CONV_STRIDE_1, CONV_PADDING_1, CONV_FILTERS_2, CONV_KERNEL_2, CONV_STRIDE_2, CONV_PADDING_2, CONV_FILTERS_3, CONV_KERNEL_3, CONV_STRIDE_3, CONV_PADDING_3, LATENT_DIM
 
 
 class ConvAutoencoder1D(nn.Module):
@@ -48,8 +47,8 @@ class ConvAutoencoder1D(nn.Module):
         )
 
         # --- Decoder Layers ---
-        # Calculate output padding dynamically (requires knowing intermediate shapes)
-        # We need conv1_out_len, conv2_out_len, conv3_out_len from _calculate_conv_output_size
+        # Calculate output padding dynamically 
+        # conv1_out_len, conv2_out_len, conv3_out_len from _calculate_conv_output_size
         op1 = self._calculate_output_padding(self.conv1_out_len, n_samples, CONV_KERNEL_1, CONV_STRIDE_1, CONV_PADDING_1)
         op2 = self._calculate_output_padding(self.conv2_out_len, self.conv1_out_len, CONV_KERNEL_2, CONV_STRIDE_2, CONV_PADDING_2)
         op3 = self._calculate_output_padding(self.conv3_out_len, self.conv2_out_len, CONV_KERNEL_3, CONV_STRIDE_3, CONV_PADDING_3)
@@ -66,18 +65,16 @@ class ConvAutoencoder1D(nn.Module):
             nn.BatchNorm1d(CONV_FILTERS_1),
             nn.ReLU(True),
             nn.ConvTranspose1d(CONV_FILTERS_1, n_channels, kernel_size=CONV_KERNEL_1, stride=CONV_STRIDE_1, padding=CONV_PADDING_1, output_padding=op1)
-            # No activation/batchnorm on final output layer typically
         )
 
     def _calculate_conv_output_size(self):
         """Helper function to calculate the output size after conv layers using a dummy input."""
-        # Use a dummy tensor to pass through the convolutional part of the encoder
+        # Using a dummy tensor to pass through the convolutional part of the encoder
         with torch.no_grad():
             dummy_input = torch.zeros(1, self.n_channels, self.n_samples) # Batch size 1
             dummy_output = self.encoder_conv(dummy_input)
             self.flattened_size = dummy_output.shape[1] # Get the flattened size
             # Store intermediate lengths needed for decoder output padding calculation
-            # This requires inspecting the layers or doing intermediate passes
             x = dummy_input
             x = self.encoder_conv[0](x) # conv1
             self.conv1_out_len = x.shape[2]
@@ -99,7 +96,7 @@ class ConvAutoencoder1D(nn.Module):
              return 0
         return output_padding
 
-    # --- Keep encode/decode methods for clarity, but they just use the modules ---
+    # --- encode/decode methods for clarity ---
     def encode(self, x):
         """Encodes the input into the latent space representation using self.encoder."""
         return self.encoder(x)

@@ -19,7 +19,7 @@ from sklearn.metrics import accuracy_score, cohen_kappa_score, f1_score, confusi
 try:
     from ..preprocess_data import load_and_preprocess_subject_data
     from ..configs.config import N_SUBJECTS, DATA_PATH, MODELS_PATH, RESULTS_PATH
-    # *** Import the renamed MindReaderModel ***
+    from ..configs.sm_config import N_CHANNELS, N_CLASSES, N_SAMPLES
     from ..supervised_models import MindReaderModel, N_CLASSES
     print(f"Imported paths: DATA={DATA_PATH}, MODELS={MODELS_PATH}, RESULTS={RESULTS_PATH}")
 except ImportError:
@@ -125,7 +125,6 @@ def train_mindreader_fold(X_train_fold, y_train_fold, X_val_fold, y_val_fold,
     X_val_reshaped = X_val_fold.reshape(n_val * c_val, t_val)
     X_val_scaled_reshaped = scaler.transform(X_val_reshaped)
     X_val_scaled = X_val_scaled_reshaped.reshape(n_val, c_val, t_val)
-    # --- End Scaling ---
 
     train_dataset = TensorDataset(torch.tensor(X_train_scaled, dtype=torch.float32), torch.tensor(y_train_fold, dtype=torch.long))
     val_dataset = TensorDataset(torch.tensor(X_val_scaled, dtype=torch.float32), torch.tensor(y_val_fold, dtype=torch.long))
@@ -177,14 +176,14 @@ def train_mindreader_fold(X_train_fold, y_train_fold, X_val_fold, y_val_fold,
         if avg_val_loss < best_val_loss:
             best_val_loss = avg_val_loss
             epochs_no_improve = 0
-            # torch.save(model.state_dict(), f"temp_best_mindreader_fold.pth") # Optional save best
+            # torch.save(model.state_dict(), f"temp_best_mindreader_fold.pth")  Save best model
         else:
             epochs_no_improve += 1
             if epochs_no_improve >= EARLY_STOPPING_PATIENCE:
                 print(f'    Early stopping triggered at epoch {epoch+1}')
                 break
 
-    # model.load_state_dict(torch.load(f"temp_best_mindreader_fold.pth")) # Optional load best
+    # model.load_state_dict(torch.load(f"temp_best_mindreader_fold.pth")) # load best model
     print(f"  Finished training MindReaderModel for fold. Best Val Loss: {best_val_loss:.4f}")
     return model, history # Return model and history
 
@@ -300,7 +299,7 @@ def run_mindreader_evaluation():
         print(f"  Overall Mean Accuracy (MindReaderModel): {mean_score:.4f} (+/- {std_score:.4f})")
         all_subject_results.append({
             'subject': f'A{subject_id:02d}',
-            'pipeline': 'MindReaderModel', # Updated name
+            'pipeline': 'MindReaderModel', 
             f'mean_{METRIC}': mean_score,
             f'std_{METRIC}': std_score,
             'n_epochs_data': n_epochs
@@ -322,11 +321,11 @@ def run_mindreader_evaluation():
     print("\n--- Average Performance Across Subjects ---")
     print(avg_results)
 
-    results_filename = RESULTS_PATH / f"mindreader_{METRIC}_results.csv" # Updated filename
+    results_filename = RESULTS_PATH / f"mindreader_{METRIC}_results.csv" 
     results_df.to_csv(results_filename, index=False, float_format='%.4f')
     print(f"\nDetailed results saved to {results_filename}")
 
-    avg_results_filename = RESULTS_PATH / f"mindreader_{METRIC}_average.csv" # Updated filename
+    avg_results_filename = RESULTS_PATH / f"mindreader_{METRIC}_average.csv"
     avg_results.to_csv(avg_results_filename, float_format='%.4f')
     print(f"Average results saved to {avg_results_filename}")
 

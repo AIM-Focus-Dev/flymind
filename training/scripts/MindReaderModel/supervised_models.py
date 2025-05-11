@@ -13,7 +13,6 @@ class MindReaderModel(nn.Module):
     Input shape: (batch_size, 1, n_channels, n_samples)
     """
     def __init__(self, n_channels=N_CHANNELS, n_samples=N_SAMPLES, num_classes=N_CLASSES,
-                 # Use original parameters as defaults
                  f1=EEGNET_F1, d=EEGNET_D, f2=EEGNET_F2, kernel_t=EEGNET_KERNEL_T,
                  pool_t=EEGNET_POOL_T, kernel_s=EEGNET_KERNEL_S, dropout=EEGNET_DROPOUT):
         super(MindReaderModel, self).__init__()
@@ -77,7 +76,7 @@ if __name__ == '__main__':
     print(f"\nDummy Input Epochs Shape: {dummy_eeg_epochs.shape}")
 
     output_logits = model(dummy_eeg_epochs)
-    print(f"Output Logits Shape: {output_logits.shape}") # Should be (batch_size, num_classes)
+    print(f"Output Logits Shape: {output_logits.shape}") 
 
     num_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
     print(f"\nTotal Trainable Parameters: {num_params:,}")

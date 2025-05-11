@@ -41,7 +41,6 @@ N_SPLITS = 5
 SHUFFLE_FOLDS = True
 RANDOM_STATE = 42
 METRIC = 'accuracy'
-# ------------------------
 
 def plot_confusion_matrix(y_true, y_pred, classes, subject_id, pipeline_name, results_path):
     """Plots the confusion matrix."""
@@ -53,7 +52,6 @@ def plot_confusion_matrix(y_true, y_pred, classes, subject_id, pipeline_name, re
     plt.title(f'Subject {subject_id:02d} - {pipeline_name} Confusion Matrix (CV Preds)')
     plt.ylabel('Actual Label')
     plt.xlabel('Predicted Label')
-    # Include pipeline name in filename
     plot_filename = results_path / f"subject_{subject_id:02d}_{pipeline_name}_confusion_matrix.png"
     plt.savefig(plot_filename)
     print(f"Saved confusion matrix plot to {plot_filename}")
@@ -78,7 +76,6 @@ def run_baseline_evaluation():
     class_names = [mne_id_to_task[mne_id] for mne_id in sorted_mne_ids]
     print(f"Class names (order {sorted_mne_ids}): {class_names}")
     del temp_epochs
-    # --- End Get Class Names ---
 
     for subject_id in range(1, N_SUBJECTS + 1):
         print(f"\n--- Processing Subject {subject_id} ---")
