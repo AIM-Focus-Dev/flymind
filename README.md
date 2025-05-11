@@ -43,10 +43,10 @@ This project explores three main types of models for classifying motor imagery t
 
 ### 1. Setup
 
-To set up the necessary directories for models and results:
+Navigate to repository:
 
 ```bash
-sh flymind/setup.sh
+cd flymind
 ```
 
 ### 2. Running the Pygame Simulation
@@ -56,13 +56,14 @@ The Pygame simulation visualizes a drone's movement based on EEG command predict
 **Example:** Run simulation for Subject 9, Training session:
 
 ```bash
-python flymind/pygame_simulation.py --subject_id 9 --session_type T
+python pygame_simulation.py --subject_id 9 --session_type T
 ```
 
 **General Usage:**
 
 ```bash
-python flymind/pygame_simulation.py --subject_id <ID> --session_type <TYPE>
+python pygame_simulation.py --subject_id <ID> --session_type <TYPE>
+
 ```
 
 - `<ID>`: Subject ID (e.g., 1, 2, ..., 9).
