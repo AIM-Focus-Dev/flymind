@@ -49,6 +49,18 @@ Navigate to repository:
 cd flymind
 ```
 
+Install requirements:
+
+```bash
+pip install -r requirements.txt
+```
+
+or for conda:
+
+```bash
+conda env create -f flymind.yml
+```
+
 ### 2. Running the Pygame Simulation
 
 The Pygame simulation visualizes a drone's movement based on EEG command predictions or ground truth data.
