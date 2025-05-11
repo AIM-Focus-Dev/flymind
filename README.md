@@ -10,7 +10,7 @@ The EEG data is preprocessed using `training/scripts/MindReaderModel/preprocess_
 
 ## Dataset
 
-The dataset used in this project, is the BCI competition 2a dataset which can be found [here][https://bbci.de/competition/iv/download/]
+The dataset used in this project, is the BCI competition 2a dataset which can be found [here](https://bbci.de/competition/iv/download/)
 
 ## Models
 
